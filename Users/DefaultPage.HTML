@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGH Boxed Goods Shop</title>
+    <link href="DefaultPages.css" rel="stylesheet" />
+    <script defer src="DefaultPage.js"></script>
+</head>
+<body>
+    <!-- Floating Cart -->
+    <div id="floatingCart" class="floating-cart">
+        <h3>Your Cart</h3>
+        <ul id="cartItems"></ul>
+        <button id="clearCart" class="btn">Clear Cart</button>
+        <button id="BuyNow" class="btn" onclick="buyNow()">Buy Now</button>
+
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <h1>PGH Boxed Goods Shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="../Manager/ContactInformation.HTML">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Banner -->
+    <section class="banner">
+        <h2>Discover the Best Items in Boxes</h2>
+        <p>Explore curated collections for every occasion</p>
+    </section>
+
+    <!-- Featured Boxes (Dynamically Loaded Products) -->
+    <section class="featured-boxes" id="productSection">
+        <div id="ProductContainer"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <p>Address: 123 Box Lane, Johannesburg, SA</p>
+            </div>
+            <div class="footer-section social-media">
+                <h3>Follow Us</h3>
+                <a href="https://www.facebook.com/chifhiwa.magwalu" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="https://www.instagram.com/precious__336" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="https://wa.me/+27715850517" target="_blank"><i class="fab fa-whatsapp"></i> Whatsapp</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 PGH Boxed Goods Shop. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

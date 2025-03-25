@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Information</title>
+    <style>
+        /* Contact Page Styling */
+        .contact-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            background-color: #f8f9fa;
+        }
+        .contact-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            border: 2px solid #28a745;
+        }
+        .contact-box h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .contact-box p {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 10px;
+        text-align: left;
+        }
+        .contact-box a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #28a745;
+            transition: color 0.3s ease-in-out;
+        }
+        .contact-box a:hover {
+            color: #218838;
+        }
+        /* Social Media Links */
+        .social-links {
+            margin-top: 15px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 10px;
+            font-size: 1.8rem;
+            color: #28a745;
+            transition: transform 0.3s ease-in-out;
+        }
+        .social-links a:hover {
+            transform: scale(1.2);
+            color: #218838;
+        }
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            display: inline-block;
+            background: #555;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.3s ease-in-out, transform 0.2s;
+        }
+        .whatsapp-btn:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+        /* Back Button Styling */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.2s;
+        }
+        .back-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <button class="back-btn" onclick="goBack()">Back</button>
+
+    <!-- Contact Container -->
+    <div class="contact-container">
+        <div class="contact-box">
+            <h2>Contact Us</h2>
+            <p><strong>FaceBook:</strong> <a href="https://www.facebook.com/chifhiwa.magwalu" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></p>
+            <p><strong>Instagram:</strong> <a href="https://www.instagram.com/precious__336" target="_blank"><i class="fab fa-instagram"></i> Instagram</a></p>
+            <p><strong>WhatsApp:</strong> <a href="https://wa.me/+27715850517" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a></p>
+            
+            <!-- Social Media Links -->
+            <div class="social-links">
+                <a href="https://www.facebook.com/chifhiwa.magwalu" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/precious__336" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+    
+        // Retrieve cart data from the URL
+        const cartData = getQueryParam("cart");
+        if (cartData) {
+            // Display cart data on the contact page
+            const cartDisplay = document.createElement("p");
+            cartDisplay.style.marginTop = "20px";
+            cartDisplay.innerHTML = `<strong>Your Order:</strong> ${cartData}`;
+            document.querySelector(".contact-box").appendChild(cartDisplay);
+    
+            // Generate WhatsApp message with cart data
+            const whatsappMessage = `Hello, I would like to place an order:\n\n${cartData}`;
+            const whatsappLink = `https://wa.me/+27636575946?text=${encodeURIComponent(whatsappMessage)}`;
+    
+            // Update WhatsApp button to include the cart data
+            const whatsappButton = document.querySelector(".whatsapp-btn");
+            whatsappButton.setAttribute("href", whatsappLink);
+        }
+    </script>
+</body>
+</html>
