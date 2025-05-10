@@ -482,7 +482,7 @@ function buyNow() {
         return;
     }
     const cartQueryString = cart.map(item => `${item.ProductName} - R${item.ProductPrice.toFixed(2)}`).join(", ");
-    window.location.href = "../Manager/ContactInformation.html?cart=" + encodeURIComponent(cartQueryString);
+    window.location.href = "Manager/ContactInformation.html?cart=" + encodeURIComponent(cartQueryString);
 }
 
       // Clear the cart
