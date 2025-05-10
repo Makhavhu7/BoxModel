@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PGH Boxed Goods Shop</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style>
         * {
             margin: 0;
@@ -11,12 +12,10 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
-
         body {
             background-color: #f4f4f4;
             color: #333;
         }
-
         .header {
             display: flex;
             align-items: center;
@@ -25,11 +24,9 @@
             padding: 15px 20px;
             color: white;
         }
-
         .logo {
             height: 50px;
         }
-
         .shop-btn {
             display: block;
             margin: 20px auto;
@@ -42,11 +39,9 @@
             border-radius: 5px;
             transition: 0.3s;
         }
-
         .shop-btn:hover {
             background: #0056b3;
         }
-
         .navbar {
             text-align: center;
             background: #fff;
@@ -55,30 +50,25 @@
             border-radius: 8px;
             box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
         }
-
         .container {
             display: flex;
             justify-content: space-around;
             padding: 20px;
         }
-
         .white-box {
             background: white;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
         .form-group {
             margin-bottom: 15px;
         }
-
         label {
             font-weight: bold;
             display: block;
             margin-bottom: 5px;
         }
-
         input[type="text"],
         input[type="file"] {
             width: 100%;
@@ -86,7 +76,6 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
         .btn {
             background: #28a745;
             color: white;
@@ -97,11 +86,13 @@
             transition: 0.3s;
             margin-right: 5px;
         }
-
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             background: #218838;
         }
-
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
         #previewImage {
             width: 100px;
             height: auto;
@@ -110,11 +101,9 @@
             border-radius: 5px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
         }
-
         #productsContainer {
             margin-top: 20px;
         }
-
         .product-card {
             background: white;
             padding: 15px;
@@ -122,19 +111,27 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
         .product-card img {
             max-width: 150px;
             height: auto;
             display: block;
             margin: 10px 0;
         }
-
+        .error-message {
+            color: #dc3545;
+            padding: 10px;
+            border: 1px solid #dc3545;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .loading {
+            color: #007BFF;
+            text-align: center;
+        }
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
             }
-
             .white-box {
                 margin-bottom: 20px;
             }
@@ -142,22 +139,16 @@
     </style>
 </head>
 <body>
-    <!-- Header Section -->
     <div class="header">
         <div>
-            <img src="plugins/images/Logo.png" alt="Logo" class="logo">
+            <img src="#" alt="Logo" class="logo">
         </div>
         <div class="header-text"><h2>PGH Boxed Goods Shop</h2></div>
     </div>
-
-    <!-- Navbar -->
     <div class="navbar">
         <h2>Welcome, Please Manage Your Products</h2>
     </div>
-
-    <!-- Main Content -->
     <div class="container">
-        <!-- Add Product Section -->
         <div class="white-box" style="flex: 1;">
             <h3>Add Product</h3>
             <div class="form-group">
@@ -173,8 +164,8 @@
                 <input type="text" id="productPrice" placeholder="Enter Price">
             </div>
             <div class="form-group">
-                <label for="productImage">Upload Product Image</label>
-                <input type="file" id="productImage" onchange="previewImage()">
+                <label for="productImage">Upload Product Image (Optional)</label>
+                <input type="file" id="productImage" accept="image/*" onchange="previewImage()">
                 <img id="previewImage">
             </div>
             <div>
@@ -182,51 +173,47 @@
                 <button class="btn" onclick="updateProduct()">Update</button>
             </div>
         </div>
-
-        <!-- Products List -->
         <div class="white-box" style="flex: 2;">
             <button class="shop-btn" onclick="redirectToShop()">To Shop</button>
             <h3>Products List</h3>
             <div id="productsContainer"></div>
         </div>
     </div>
-
     <script>
         // Replace with your deployed Apps Script URL
-        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3CRN6IZ_TDy6mJE4AZcUJfax71NHwRgdcEB69iZCeshqJMw6h-ct_wgq2MfxdcQCO/exec";
-
-        // Initialize when page loads
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyu9RW-putvr0P_F423F5gStC8ft_Nk0bRz9QKj052aA4WVqgy73dUqZGcY-0IjIG6j/exec";
+        
         document.addEventListener("DOMContentLoaded", function() {
             console.log("DOM fully loaded");
             showLoading();
-            loadProducts().finally(() => hideLoading());
+            loadProducts();
         });
 
-        // Preview Image Before Upload
         function previewImage() {
             const fileInput = document.getElementById("productImage");
             const preview = document.getElementById("previewImage");
-            
             if (fileInput.files && fileInput.files[0]) {
                 const file = fileInput.files[0];
-                // Validate file type
                 if (!file.type.match('image.*')) {
                     alert("Please select an image file (JPEG, PNG, GIF)");
                     fileInput.value = '';
+                    preview.style.display = "none";
                     return;
                 }
-                
-                // Validate file size (max 5MB)
                 if (file.size > 5 * 1024 * 1024) {
                     alert("Image size should be less than 5MB");
                     fileInput.value = '';
+                    preview.style.display = "none";
                     return;
                 }
-                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.style.display = "block";
+                };
+                reader.onerror = function() {
+                    alert("Error reading image file");
+                    preview.style.display = "none";
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -235,7 +222,6 @@
             }
         }
 
-        // Convert file to Base64
         function getBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -245,13 +231,11 @@
             });
         }
 
-        // Show loading message
         function showLoading() {
             const container = document.getElementById("productsContainer");
             container.innerHTML = '<p class="loading">Loading products...</p>';
         }
 
-        // Hide loading message
         function hideLoading() {
             const container = document.getElementById("productsContainer");
             if (container.innerHTML.includes("Loading products...")) {
@@ -259,154 +243,208 @@
             }
         }
 
-        // Add new product
+        async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    // For POST requests, use a proxy if needed
+                    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                    const finalUrl = options.method === 'POST' ? proxyUrl + url : url;
+                    
+                    const response = await fetch(finalUrl, {
+                        ...options,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+                    if (i < retries - 1) {
+                        console.log(`Retrying (${i + 1}/${retries})...`);
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        continue;
+                    }
+                    throw error;
+                }
+            }
+        }
+
         async function addProduct() {
+            const addBtn = document.querySelector('.btn[onclick="addProduct()"]');
+            addBtn.disabled = true;
             const productID = document.getElementById("productID").value.trim();
             const productName = document.getElementById("productName").value.trim();
-            const productPrice = document.getElementById("productPrice").value.trim();
+            let productPrice = document.getElementById("productPrice").value.trim();
             const productImage = document.getElementById("productImage").files[0];
-
+            
             if (!productID || !productName || !productPrice) {
                 alert("Please fill in all required fields!");
+                addBtn.disabled = false;
                 return;
             }
-
+            
+            productPrice = parseFloat(productPrice);
+            if (isNaN(productPrice) || productPrice <= 0) {
+                alert("Please enter a valid price (e.g., 10.99)");
+                addBtn.disabled = false;
+                return;
+            }
+            
             showLoading();
             try {
                 let imageBase64 = "";
                 if (productImage) {
                     imageBase64 = await getBase64(productImage);
                 }
-
-                const response = await fetchWithRetry(APP_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'addProduct',
-                        ProductID: productID,
-                        ProductName: productName,
-                        ProductPrice: productPrice,
-                        imageBase64: imageBase64
-                    })
-                });
-
-                const result = await response.json();
                 
+                const response = await fetchWithRetry(
+                    APP_SCRIPT_URL,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            action: 'addProduct',
+                            ProductID: productID,
+                            ProductName: productName,
+                            ProductPrice: productPrice,
+                            imageBase64: imageBase64
+                        })
+                    }
+                );
+                
+                const result = await response.json();
                 if (!result.success) {
-                    throw new Error(result.data.error || "Failed to add product");
+                    throw new Error(result.message || "Failed to add product");
                 }
-
+                
                 alert("Product added successfully!");
                 resetForm();
-                await loadProducts();
+                loadProducts();
             } catch (error) {
                 console.error("Error adding product:", error);
                 alert("Error adding product: " + error.message);
             } finally {
                 hideLoading();
+                addBtn.disabled = false;
             }
         }
 
-        // Update product
         async function updateProduct() {
+            const updateBtn = document.querySelector('.btn[onclick="updateProduct()"]');
+            updateBtn.disabled = true;
             const productID = document.getElementById("productID").value.trim();
             const productName = document.getElementById("productName").value.trim();
-            const productPrice = document.getElementById("productPrice").value.trim();
+            let productPrice = document.getElementById("productPrice").value.trim();
             const productImage = document.getElementById("productImage").files[0];
-
+            
             if (!productID || !productName || !productPrice) {
                 alert("Please fill in all required fields!");
+                updateBtn.disabled = false;
                 return;
             }
-
+            
+            productPrice = parseFloat(productPrice);
+            if (isNaN(productPrice) || productPrice <= 0) {
+                alert("Please enter a valid price (e.g., 10.99)");
+                updateBtn.disabled = false;
+                return;
+            }
+            
             showLoading();
             try {
                 let imageBase64 = "";
                 if (productImage) {
                     imageBase64 = await getBase64(productImage);
                 }
-
-                const response = await fetchWithRetry(APP_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'updateProduct',
-                        ProductID: productID,
-                        ProductName: productName,
-                        ProductPrice: productPrice,
-                        imageBase64: imageBase64
-                    })
-                });
-
-                const result = await response.json();
                 
+                const response = await fetchWithRetry(
+                    APP_SCRIPT_URL,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            action: 'updateProduct',
+                            ProductID: productID,
+                            ProductName: productName,
+                            ProductPrice: productPrice,
+                            imageBase64: imageBase64
+                        })
+                    }
+                );
+                
+                const result = await response.json();
                 if (!result.success) {
-                    throw new Error(result.data.error || "Failed to update product");
+                    throw new Error(result.message || "Failed to update product");
                 }
-
+                
                 alert("Product updated successfully!");
                 resetForm();
-                await loadProducts();
+                loadProducts();
             } catch (error) {
                 console.error("Error updating product:", error);
                 alert("Error updating product: " + error.message);
             } finally {
                 hideLoading();
+                updateBtn.disabled = false;
             }
         }
 
-        // Load all products
-        async function loadProducts(retryCount = 0) {
-            console.log(`Attempting to load products, retry ${retryCount}`);
+        function loadProducts() {
+            console.log("Loading products via JSONP");
             const container = document.getElementById("productsContainer");
+            container.innerHTML = '<p class="loading">Loading products...</p>';
             
-            try {
-                container.innerHTML = '<p class="loading">Loading products...</p>';
-                const response = await fetchWithRetry(`${APP_SCRIPT_URL}?action=getProducts&t=${Date.now()}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                const result = await response.json();
-                console.log("Received products:", result);
+            const callbackName = `jsonp_${Date.now()}`;
+            window[callbackName] = function(result) {
+                delete window[callbackName];
+                hideLoading();
+                
                 if (!result.success || !Array.isArray(result.data)) {
-                    throw new Error("Invalid data received");
+                    container.innerHTML = `
+                        <div class="error-message">
+                            <p>Failed to load products</p>
+                            <p>${result.message || 'Invalid data received'}</p>
+                            <button onclick="loadProducts()">Retry</button>
+                        </div>
+                    `;
+                    return;
                 }
+                
                 renderProducts(result.data);
-            } catch (error) {
-                console.error("Error loading products:", error);
+            };
+            
+            const script = document.createElement('script');
+            script.src = `${APP_SCRIPT_URL}?action=getProducts&callback=${callbackName}&t=${Date.now()}`;
+            script.onerror = () => {
+                delete window[callbackName];
+                hideLoading();
                 container.innerHTML = `
                     <div class="error-message">
                         <p>Failed to load products</p>
-                        <p>${error.message}</p>
+                        <p>Network or server error. Check Apps Script URL and deployment.</p>
                         <button onclick="loadProducts()">Retry</button>
                     </div>
                 `;
-            }
+            };
+            document.head.appendChild(script);
         }
 
-        // Delete Product
         async function deleteProduct(productID) {
             if (!confirm("Are you sure you want to delete this product?")) return;
             
             try {
-                const response = await fetchWithRetry(`${APP_SCRIPT_URL}?action=deleteProduct&productId=${encodeURIComponent(productID)}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                const result = await response.json();
+                const response = await fetchWithRetry(
+                    `${APP_SCRIPT_URL}?action=deleteProduct&productId=${encodeURIComponent(productID)}`,
+                    { method: 'GET' }
+                );
                 
+                const result = await response.json();
                 if (!result.success) {
-                    throw new Error(result.data.error || "Failed to delete product");
+                    throw new Error(result.message || "Failed to delete product");
                 }
-
+                
                 alert("Product deleted successfully!");
                 loadProducts();
             } catch (error) {
@@ -415,34 +453,41 @@
             }
         }
 
-        // Edit Product
         function editProduct(product) {
-            document.getElementById("productID").value = product.ProductID;
-            document.getElementById("productName").value = product.ProductName;
-            document.getElementById("productPrice").value = product.ProductPrice;
-            document.getElementById("previewImage").src = product.ProductImageURL || "";
-            document.getElementById("previewImage").style.display = product.ProductImageURL ? "block" : "none";
-            document.getElementById("productImage").value = ""; // Clear file input
+            try {
+                document.getElementById("productID").value = product.ProductID || '';
+                document.getElementById("productName").value = product.ProductName || '';
+                document.getElementById("productPrice").value = product.ProductPrice || '';
+                document.getElementById("previewImage").src = product.ProductImageURL || "";
+                document.getElementById("previewImage").style.display = product.ProductImageURL ? "block" : "none";
+                document.getElementById("productImage").value = "";
+            } catch (error) {
+                console.error("Error editing product:", error);
+                alert("Error loading product details");
+            }
         }
 
-        // Reset Form
         function resetForm() {
             document.getElementById("productID").value = "";
             document.getElementById("productName").value = "";
             document.getElementById("productPrice").value = "";
             document.getElementById("productImage").value = "";
+            document.getElementById("previewImage").src = "";
             document.getElementById("previewImage").style.display = "none";
         }
 
-        // Redirect to Shop
         function redirectToShop() {
-            window.location.href = "/shop";
+            try {
+                window.location.href = "shop.html";
+            } catch (error) {
+                console.error("Error redirecting to shop:", error);
+                alert("Shop page not found");
+            }
         }
 
-        // Escape HTML to prevent XSS
         function escapeHtml(unsafe) {
             if (!unsafe) return '';
-            return unsafe.toString()
+            return String(unsafe)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
@@ -450,68 +495,48 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // Render products to the UI
         function renderProducts(products) {
             const container = document.getElementById("productsContainer");
             container.innerHTML = "";
-
-            if (products.length === 0) {
+            
+            if (!products || products.length === 0) {
                 container.innerHTML = "<p>No products found</p>";
                 return;
             }
-
+            
             products.forEach(product => {
-                const productCard = document.createElement("div");
-                productCard.className = "product-card";
-                productCard.innerHTML = `
-                    <h4>${escapeHtml(product.ProductName)}</h4>
-                    <p>ID: ${escapeHtml(product.ProductID)}</p>
-                    <p>Price: $${escapeHtml(product.ProductPrice)}</p>
-                    ${product.ProductImageURL ? 
-                      `<img src="${escapeHtml(product.ProductImageURL)}" 
-                            alt="${escapeHtml(product.ProductName)}" 
-                            onerror="this.style.display='none'">` : ''}
-                    <button class="btn" onclick="editProduct(${JSON.stringify(product)})">
-                        Edit
-                    </button>
-                    <button class="btn" onclick="deleteProduct('${escapeHtml(product.ProductID)}')">
-                        Delete
-                    </button>
-                `;
-                container.appendChild(productCard);
-            });
-        }
-
-        // Show error message
-        function showError(message) {
-            const errorDiv = document.createElement("div");
-            errorDiv.className = "error-message";
-            errorDiv.textContent = message;
-            document.body.appendChild(errorDiv);
-            setTimeout(() => errorDiv.remove(), 5000);
-        }
-
-        // Fetch with retry logic
-        async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
-            for (let i = 0; i < retries; i++) {
                 try {
-                    const response = await fetch(url, options);
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(errorData.error || `HTTP error: ${response.status}`);
-                    }
-                    return response;
+                    const productCard = document.createElement("div");
+                    productCard.className = "product-card";
+                    
+                    const safeProduct = {
+                        ProductID: escapeHtml(product.ProductID),
+                        ProductName: escapeHtml(product.ProductName),
+                        ProductPrice: escapeHtml(String(product.ProductPrice)),
+                        ProductImageURL: escapeHtml(product.ProductImageURL)
+                    };
+                    
+                    productCard.innerHTML = `
+                        <h4>${safeProduct.ProductName}</h4>
+                        <p>ID: ${safeProduct.ProductID}</p>
+                        <p>Price: $${safeProduct.ProductPrice}</p>
+                        ${safeProduct.ProductImageURL ?
+                          `<img src="${safeProduct.ProductImageURL}"
+                                alt="${safeProduct.ProductName}"
+                                onerror="this.style.display='none'">` : ''}
+                        <button class="btn" onclick='editProduct(${JSON.stringify(product).replace(/'/g, "\\'")})'>
+                            Edit
+                        </button>
+                        <button class="btn" onclick="deleteProduct('${safeProduct.ProductID}')">
+                            Delete
+                        </button>
+                    `;
+                    container.appendChild(productCard);
                 } catch (error) {
-                    if (i < retries - 1) {
-                        console.log(`Fetch failed, retrying (${i + 1}/${retries})...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        continue;
-                    }
-                    throw error;
+                    console.error("Error rendering product:", product, error);
                 }
-            }
+            });
         }
     </script>
 </body>
 </html>
-
