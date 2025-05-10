@@ -1,71 +1,509 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PGH Boxed Goods Shop</title>
-    <link href="DefaultPages.css" rel="stylesheet" />
-    <script defer src="DefaultPage.js"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boxed Goodies Emporium Shop</title>
+    <meta name="description" content="Discover the best boxed goods for every occasion" />
+    <style>
+      /* Base styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      /* Header styles */
+      header {
+        background: linear-gradient(to right, #9b87f5, #7E69AB);
+        color: white;
+        padding: 1rem 2rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 1.5rem;
+      }
+      
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      
+      nav a:hover {
+        text-decoration: underline;
+      }
+      
+      /* Banner styles */
+      .banner {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=1600');
+        background-size: cover;
+        background-position: center;
+        padding: 5rem 0;
+        text-align: center;
+        color: white;
+      }
+      
+      .banner h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+      }
+      
+      .banner p {
+        font-size: 1.25rem;
+      }
+      
+      /* Products section */
+      .products-section {
+        padding: 3rem 0;
+        background-color: #f9f9f9;
+      }
+      
+      .section-title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        color: #333;
+      }
+      
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      
+      @media (min-width: 640px) {
+        .products-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      
+      @media (min-width: 1024px) {
+        .products-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      
+      .product-card {
+        background: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      }
+      
+      .product-image {
+        height: 12rem;
+        width: 100%;
+        overflow: hidden;
+      }
+      
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+      
+      .product-image img:hover {
+        transform: scale(1.05);
+      }
+      
+      .product-info {
+        padding: 1.5rem;
+      }
+      
+      .product-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      
+      .product-price {
+        color: #7E69AB;
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+      }
+      
+      .order-button {
+        width: 100%;
+        background-color: #6E59A5;
+        color: white;
+        border: none;
+        padding: 0.75rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      .order-button:hover {
+        background-color: #9b87f5;
+      }
+      
+      /* Floating cart */
+      .floating-cart {
+        position: fixed;
+        top: 6rem;
+        right: 1rem;
+        z-index: 50;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        width: 16rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+      
+      .floating-cart h3 {
+        font-weight: 600;
+        font-size: 1.125rem;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+      
+      .cart-items {
+        max-height: 15rem;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+      }
+      
+      .cart-empty {
+        color: #9ca3af;
+        font-style: italic;
+        margin: 1rem 0;
+      }
+      
+      .cart-item {
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      
+      .cart-buttons {
+        display: flex;
+        gap: 0.5rem;
+      }
+      
+      .cart-button {
+        flex: 1;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.375rem;
+        border: none;
+        font-size: 0.875rem;
+        cursor: pointer;
+      }
+      
+      .clear-button {
+        background-color: #f3f4f6;
+        color: #4b5563;
+      }
+      
+      .clear-button:hover {
+        background-color: #e5e7eb;
+      }
+      
+      .buy-button {
+        background-color: #10b981;
+        color: white;
+      }
+      
+      .buy-button:hover {
+        background-color: #059669;
+      }
+      
+      /* Footer */
+      footer {
+        background-color: #1f2937;
+        color: white;
+        margin-top: auto;
+      }
+      
+      .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2.5rem 1rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      @media (min-width: 768px) {
+        .footer-container {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      
+      .footer-section h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      
+      .footer-section ul {
+        list-style: none;
+        space-y: 0.5rem;
+      }
+      
+      .footer-section li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .footer-section a {
+        color: #9ca3af;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      
+      .footer-section a:hover {
+        color: #6E59A5;
+      }
+      
+      .social-media a {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      
+      .footer-bottom {
+        background-color: #111827;
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
     <!-- Floating Cart -->
-    <div id="floatingCart" class="floating-cart">
-        <h3>Your Cart</h3>
-        <ul id="cartItems"></ul>
-        <button id="clearCart" class="btn">Clear Cart</button>
-        <button id="BuyNow" class="btn" onclick="buyNow()">Buy Now</button>
-
+    <div class="floating-cart">
+      <h3>Your Cart</h3>
+      <div class="cart-items" id="cartItems">
+        <p class="cart-empty">Your cart is empty</p>
+      </div>
+      <div class="cart-buttons">
+        <button class="cart-button clear-button" id="clearCart">Clear Cart</button>
+        <button class="cart-button buy-button" id="buyNow">Buy Now</button>
+      </div>
     </div>
 
     <!-- Header -->
     <header>
+      <div class="container">
         <div class="logo">
-            <h1>PGH Boxed Goods Shop</h1>
+          <h1>PGH Boxed Goods Shop</h1>
         </div>
         <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="../Manager/ContactInformation.HTML">Contact</a></li>
-            </ul>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
         </nav>
+      </div>
     </header>
 
-    <!-- Main Banner -->
+    <!-- Main Banner with Background Image -->
     <section class="banner">
+      <div class="container">
         <h2>Discover the Best Items in Boxes</h2>
         <p>Explore curated collections for every occasion</p>
+      </div>
     </section>
 
-    <!-- Featured Boxes (Dynamically Loaded Products) -->
-    <section class="featured-boxes" id="productSection">
-        <div id="ProductContainer"></div>
+    <!-- Products Section -->
+    <section class="products-section">
+      <h2 class="section-title">Our Products</h2>
+      <div class="products-grid" id="productsGrid"></div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>About Us</h3>
-                <ul>
-                    <li><a href="#">Our Story</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Blog</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <p>Address: 123 Box Lane, Johannesburg, SA</p>
-            </div>
-            <div class="footer-section social-media">
-                <h3>Follow Us</h3>
-                <a href="https://www.facebook.com/chifhiwa.magwalu" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
-                <a href="https://www.instagram.com/precious__336" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-                <a href="https://wa.me/+27715850517" target="_blank"><i class="fab fa-whatsapp"></i> Whatsapp</a>
-            </div>
+      <div class="footer-container">
+        <div class="footer-section">
+          <h3>About Us</h3>
+          <ul>
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 PGH Boxed Goods Shop. All rights reserved.</p>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>Address: 123 Box Lane, Johannesburg, SA</p>
         </div>
+        <div class="footer-section social-media">
+          <h3>Follow Us</h3>
+          <a href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook</a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram</a>
+          <a href="https://wa.me/" target="_blank" rel="noreferrer">Whatsapp</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 PGH Boxed Goods Shop. All rights reserved.</p>
+      </div>
     </footer>
-</body>
+
+    <script>
+      // Sample product data
+      const products = [
+        { 
+          ProductID: 1, 
+          ProductName: "Boxed Chocolate", 
+          ProductPrice: 29.99, 
+          ProductImage: "https://images.unsplash.com/photo-1481391319762-47dff72954d9?auto=format&fit=crop&q=80&w=1000" 
+        },
+        { 
+          ProductID: 2, 
+          ProductName: "Boxed Tea", 
+          ProductPrice: 15.99, 
+          ProductImage: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=1000" 
+        },
+        { 
+          ProductID: 3, 
+          ProductName: "Boxed Coffee", 
+          ProductPrice: 19.99, 
+          ProductImage: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&q=80&w=1000" 
+        },
+        { 
+          ProductID: 4, 
+          ProductName: "Boxed Snacks", 
+          ProductPrice: 12.99, 
+          ProductImage: "https://images.unsplash.com/photo-1621939514649-280e2ee25f60?auto=format&fit=crop&q=80&w=1000" 
+        },
+        { 
+          ProductID: 5, 
+          ProductName: "Boxed Candles", 
+          ProductPrice: 25.99, 
+          ProductImage: "https://images.unsplash.com/photo-1603006905003-be475563f01a?auto=format&fit=crop&q=80&w=1000" 
+        }
+      ];
+
+      // Initialize cart from localStorage
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      // Update cart UI
+      function updateCartUI() {
+        const cartItemsElement = document.getElementById("cartItems");
+        
+        if (cart.length === 0) {
+          cartItemsElement.innerHTML = '<p class="cart-empty">Your cart is empty</p>';
+          return;
+        }
+
+        let cartHtml = '';
+        cart.forEach(product => {
+          cartHtml += `<div class="cart-item">${product.ProductName} - R${product.ProductPrice.toFixed(2)}</div>`;
+        });
+        
+        cartItemsElement.innerHTML = cartHtml;
+      }
+
+      // Load products
+      function loadProducts() {
+        const productsGrid = document.getElementById("productsGrid");
+        let productsHtml = '';
+        
+        products.forEach(product => {
+          productsHtml += `
+            <div class="product-card">
+              <div class="product-image">
+                <img 
+                  src="${product.ProductImage}" 
+                  alt="${product.ProductName}"
+                  loading="lazy"
+                />
+              </div>
+              <div class="product-info">
+                <h3 class="product-name">${product.ProductName}</h3>
+                <p class="product-price">R${product.ProductPrice.toFixed(2)}</p>
+                <button 
+                  class="order-button" 
+                  onclick="orderProduct(${product.ProductID})"
+                >
+                  Order Now
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        productsGrid.innerHTML = productsHtml;
+      }
+
+      // Add product to cart
+      function orderProduct(productId) {
+        const selectedProduct = products.find(p => p.ProductID === productId);
+        if (selectedProduct) {
+          cart.push(selectedProduct);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCartUI();
+        }
+      }
+
+      // Buy Now functionality
+function buyNow() {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+    const cartQueryString = cart.map(item => `${item.ProductName} - R${item.ProductPrice.toFixed(2)}`).join(", ");
+    window.location.href = "../Manager/ContactInformation.html?cart=" + encodeURIComponent(cartQueryString);
+}
+
+      // Clear the cart
+      function clearCart() {
+        cart = [];
+        localStorage.removeItem("cart");
+        updateCartUI();
+      }
+
+      // Initialize the page
+      document.addEventListener("DOMContentLoaded", () => {
+        loadProducts();
+        updateCartUI();
+        
+        // Add event listeners
+        document.getElementById("clearCart").addEventListener("click", clearCart);
+        document.getElementById("buyNow").addEventListener("click", buyNow);
+      });
+    </script>
+    
+    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  </body>
 </html>
